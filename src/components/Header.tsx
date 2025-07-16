@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,8 +18,13 @@ const Header = () => {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    element?.scrollIntoView({ behavior: 'smooth' });
+    if (location.pathname === '/') {
+      const element = document.getElementById(sectionId);
+      element?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // Navigate to home page and then scroll to section
+      window.location.href = `/#${sectionId}`;
+    }
     setIsMobileMenuOpen(false);
   };
 
@@ -28,39 +35,45 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         <nav className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
               <span className="text-primary-foreground font-bold text-sm">TS</span>
             </div>
             <span className="font-bold text-xl gradient-text">TechSolutions Pro</span>
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <button 
-              onClick={() => scrollToSection('home')}
-              className="text-foreground hover:text-primary transition-colors"
+            <Link 
+              to="/"
+              className={`transition-colors ${location.pathname === '/' ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}
             >
               Home
-            </button>
-            <button 
-              onClick={() => scrollToSection('services')}
-              className="text-foreground hover:text-primary transition-colors"
+            </Link>
+            <Link 
+              to="/services"
+              className={`transition-colors ${location.pathname === '/services' ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}
             >
               Services
-            </button>
-            <button 
-              onClick={() => scrollToSection('about')}
-              className="text-foreground hover:text-primary transition-colors"
+            </Link>
+            <Link 
+              to="/about"
+              className={`transition-colors ${location.pathname === '/about' ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}
             >
               About
-            </button>
-            <button 
-              onClick={() => scrollToSection('contact')}
-              className="text-foreground hover:text-primary transition-colors"
+            </Link>
+            <Link 
+              to="/contact"
+              className={`transition-colors ${location.pathname === '/contact' ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}
             >
               Contact
-            </button>
+            </Link>
+            <Link 
+              to="/careers"
+              className={`transition-colors ${location.pathname === '/careers' ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}
+            >
+              Careers
+            </Link>
             <ThemeToggle />
           </div>
 
@@ -81,30 +94,41 @@ const Header = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden mt-4 glass rounded-lg p-4 animate-fade-in-up">
             <div className="flex flex-col space-y-3">
-              <button 
-                onClick={() => scrollToSection('home')}
-                className="text-left text-foreground hover:text-primary transition-colors py-2"
+              <Link 
+                to="/"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`text-left py-2 transition-colors ${location.pathname === '/' ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}
               >
                 Home
-              </button>
-              <button 
-                onClick={() => scrollToSection('services')}
-                className="text-left text-foreground hover:text-primary transition-colors py-2"
+              </Link>
+              <Link 
+                to="/services"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`text-left py-2 transition-colors ${location.pathname === '/services' ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}
               >
                 Services
-              </button>
-              <button 
-                onClick={() => scrollToSection('about')}
-                className="text-left text-foreground hover:text-primary transition-colors py-2"
+              </Link>
+              <Link 
+                to="/about"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`text-left py-2 transition-colors ${location.pathname === '/about' ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}
               >
                 About
-              </button>
-              <button 
-                onClick={() => scrollToSection('contact')}
-                className="text-left text-foreground hover:text-primary transition-colors py-2"
+              </Link>
+              <Link 
+                to="/contact"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`text-left py-2 transition-colors ${location.pathname === '/contact' ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}
               >
                 Contact
-              </button>
+              </Link>
+              <Link 
+                to="/careers"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`text-left py-2 transition-colors ${location.pathname === '/careers' ? 'text-primary font-medium' : 'text-foreground hover:text-primary'}`}
+              >
+                Careers
+              </Link>
             </div>
           </div>
         )}
